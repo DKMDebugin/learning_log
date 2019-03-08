@@ -17,8 +17,14 @@ from django.contrib import admin
 from django.conf.urls import include, url
 from django.urls import path
 
+from learning_logs.views import handler404, handler500
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^users/', include(('users.urls', 'users'), namespace='users')),
     url(r'', include(('learning_logs.urls', 'learning_logs'), namespace ='learning_logs')),
 ]
+
+# For custom error templates
+handler404 = handler404
+handler500 = handler500

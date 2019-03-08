@@ -24,7 +24,6 @@ def topics(request):
 def topic(request, topic_id):
     '''Show a single topic and all its entries'''
     # query db
-    # topic = Topic.objects.get(id=topic_id)
     topic = get_object_or_404(Topic,  id=topic_id)
 
     # Make sure the topic belongs to the current User
@@ -57,7 +56,8 @@ def new_topic(request):
 @login_required
 def new_entry(request, topic_id):
     '''Add a new entry for a particular topic'''
-    topic = Topic.objects.get(id=topic_id)
+    # topic = Topic.objects.get(id=topic_id)
+    topic = get_object_or_404(Topic, id=topic_id)
 
     # Make sure the topic belongs to the current User
     check_topic_owner(topic, request)
@@ -82,7 +82,8 @@ def new_entry(request, topic_id):
 @login_required
 def edit_entry(request, entry_id):
     """Edit an existing entry."""
-    entry = Entry.objects.get(id=entry_id)
+    # entry = Entry.objects.get(id=entry_id)
+    entry = get_object_or_404(Entry, id=entry_id)
     topic =  entry.topic
 
     # Make sure the topic belongs to the current User
@@ -107,3 +108,12 @@ def check_topic_owner(topic, request):
     '''check if the user trying to acess a topic is logged in'''
     if topic.owner != request.user:
         raise Http404
+
+# for cutom error pages
+def handler404(request, exception):
+    '''Show 404 cutom error page'''
+    return render(request, 'learning_log/404.html', status=404)
+
+def handler500(request):
+    '''Show 500 error page'''
+    return render(request, 'learning_log/500.html', status=500)
